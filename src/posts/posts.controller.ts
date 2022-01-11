@@ -7,8 +7,8 @@ export class PostsController {
     constructor(private readonly postsService: PostsService) {}
 
     @Get()
-    public findAll(): Array<PostModel> {
-        return this.postsService.findAll()
+    public async findAll(): Promise<any[]> {
+        return await this.postsService.findAll()
     }
 
     @Get(':id')

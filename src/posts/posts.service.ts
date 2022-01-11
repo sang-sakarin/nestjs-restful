@@ -1,12 +1,21 @@
 import {Injectable, NotFoundException, UnprocessableEntityException} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Post } from './posts.entity';
 import { PostModel } from './posts.interface';
 
 @Injectable()
 export class PostsService {
+
+    constructor(
+        @InjectRepository(Post)
+        private readonly postRepository: Repository<Post>,
+    ) {}
+
     private posts: Array<PostModel> = [];
 
-    public findAll(): Array<PostModel> {
-        return this.posts
+    async findAll(): Promise<Post[]> {
+        return await this.postRepository.find();
     }
 
     public findOne(id: number): PostModel {
