@@ -5,6 +5,7 @@ import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/posts.entity';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { DefaultAdminModule, AdminUserEntity } from 'nestjs-admin'
 import configuration from "./config/configuration";
 
 @Module({
@@ -22,11 +23,12 @@ import configuration from "./config/configuration";
               username: configService.get('database.user'),
               password: configService.get('database.password'),
               database: configService.get('database.name'),
-              entities: [Post],
+              entities: [AdminUserEntity, Post],
               synchronize: true
           }),
           inject: [ConfigService]
-      })
+      }),
+      DefaultAdminModule
   ],
   controllers: [AppController],
   providers: [AppService],
