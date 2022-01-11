@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { Expose } from 'class-transformer'
 
 @Entity()
 export class Post {
@@ -16,4 +17,10 @@ export class Post {
 
     @Column({ length: 32 })
     category: string;
+
+    @Expose()
+    get fullName(): string {
+        return `${this.title} 2222`;
+    }
+
 }
