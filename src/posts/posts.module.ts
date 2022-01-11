@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './posts.entity';
 import { DefaultAdminModule, DefaultAdminSite } from 'nestjs-admin'
 import { PostAdmin } from './posts.admin'
+import { PostSubsriber } from './posts.subsriber';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post]), DefaultAdminModule],
-  providers: [PostsService],
+  providers: [PostsService, PostSubsriber],
   controllers: [PostsController],
   exports: [PostsService]
 })
