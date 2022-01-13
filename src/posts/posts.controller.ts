@@ -1,18 +1,16 @@
-import { Body, Controller, Get, Post, Delete, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Patch, Delete, Param, ParseIntPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { PostsService } from "./posts.service";
 import { PostModel } from "./posts.interface";
-import { PostFormSerializer } from './posts.serializer';
 import { CreatePostInput } from './dto/create-post.input';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { LoggingInterceptor } from 'src/commons/interceptors/logging.interceptor';
 
-@Controller({
-    path: 'posts',
-    version: '1'
-})
+@Controller({path: 'posts', version: '1'})
 export class PostsController {
     constructor(private readonly postsService: PostsService) {}
 
     @Get()
-    public async findAll(): Promise<any[]> {
+    async findAll(): Promise<any[]> {
         return await this.postsService.findAll()
     }
 
@@ -23,8 +21,13 @@ export class PostsController {
     }
 
     @Post()
-    public async create(@Body() createPostInput : CreatePostInput) {
+    async create(@Body() createPostInput: CreatePostInput) {
         return await this.postsService.create(createPostInput)
+    }
+
+    @Patch(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() updatePostDto: UpdatePostDto) {
+        return await this.postsService.update(id, updatePostDto);
     }
 
     @Delete(':id')

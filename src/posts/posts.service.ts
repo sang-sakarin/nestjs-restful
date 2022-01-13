@@ -2,6 +2,7 @@ import {Injectable, NotFoundException, UnprocessableEntityException} from '@nest
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
+import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './posts.entity';
 import { PostModel } from './posts.interface';
 
@@ -16,7 +17,7 @@ export class PostsService {
     private posts: Array<PostModel> = [];
 
     async findAll(): Promise<Post[]> {
-        return await this.postRepository.find();
+        return await this.postRepository.find()
     }
 
     async findOne(id: number): Promise<Post> {
@@ -29,6 +30,20 @@ export class PostsService {
         await this.postRepository.insert(post)
 
         return post
+    }
+
+    async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {
+        var post = await this.postRepository.create(updatePostDto)
+
+        console.log(post)
+
+        await this.postRepository.update(id, post)
+
+        var a = await this.postRepository.findOne(id)
+
+        console.log(a)
+
+        return a
     }
 
     async remove(id: number) {

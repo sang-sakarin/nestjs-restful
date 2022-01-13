@@ -7,6 +7,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DefaultAdminModule, AdminUserEntity } from 'nestjs-admin'
 import { CommonsModule } from './commons/commons.module';
+import { TemplateModule } from './template/template.module';
 import configuration from "./config/configuration";
 
 @Module({
@@ -30,7 +31,8 @@ import configuration from "./config/configuration";
           inject: [ConfigService]
       }),
       DefaultAdminModule,
-      CommonsModule
+      CommonsModule,
+      TemplateModule
   ],
   controllers: [AppController],
   providers: [AppService],
