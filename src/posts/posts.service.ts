@@ -1,6 +1,7 @@
 import {Injectable, NotFoundException, UnprocessableEntityException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreatePostInput } from './dto/create-post.input';
 import { Post } from './posts.entity';
 import { PostModel } from './posts.interface';
 
@@ -18,36 +19,19 @@ export class PostsService {
         return await this.postRepository.find();
     }
 
-    public findOne(id: number): PostModel {
-        const post: PostModel = this.posts.find(p => p.id === id);
-
-        if (!post) {
-            throw new NotFoundException('Post not found.')
-        }
-
-        return post;
+    async findOne(id: number): Promise<Post> {
+        return await this.postRepository.findOne(id)
     }
 
-    public create(post: PostModel): PostModel {
-        const titleExists: boolean = this.posts.some((item) => item.title === post.title)
+    async create(createPostInput: CreatePostInput): Promise<Post> {
+        var post = await this.postRepository.create(createPostInput)
 
-        if (titleExists) {
-            throw new UnprocessableEntityException('Post title already exists.');
-        }
+        await this.postRepository.insert(post)
 
-        // find the next id for a new blog post
-        const maxId: number = 1
-        const id: number = maxId + 1;
+        return post
+    }
 
-        const blogPost: PostModel = {
-            ...post,
-            id,
-        };
-
-        this.posts.push(blogPost);
-
-        return blogPost;
-
-
+    async remove(id: number) {
+        await this.postRepository.softDelete(id);
     }
 }

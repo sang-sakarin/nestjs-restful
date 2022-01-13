@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 import { Expose } from 'class-transformer'
+import { SoftDeletion } from "src/commons/entities/common.entity";
 
 @Entity()
-export class Post {
+export class Post extends SoftDeletion {
     @PrimaryGeneratedColumn()
     id: number;
 

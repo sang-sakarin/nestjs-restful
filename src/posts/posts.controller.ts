@@ -1,7 +1,8 @@
-import {Body, Controller, Get, Param, ParseIntPipe, Post} from '@nestjs/common';
+import { Body, Controller, Get, Post, Delete, Param, ParseIntPipe } from '@nestjs/common';
 import { PostsService } from "./posts.service";
-import {PostModel} from "./posts.interface";
+import { PostModel } from "./posts.interface";
 import { PostFormSerializer } from './posts.serializer';
+import { CreatePostInput } from './dto/create-post.input';
 
 @Controller({
     path: 'posts',
@@ -16,15 +17,18 @@ export class PostsController {
     }
 
     @Get(':id')
-    public findOne(@Param('id', ParseIntPipe) id: number): PostModel {
-        return this.postsService.findOne(id)
+    async findOne(@Param('id', ParseIntPipe) id: number) {
+        return await this.postsService.findOne(id)
+
     }
 
     @Post()
-    public create(@Body() postFormSerialize: PostFormSerializer) {
-        return "aaaaa"
-        // return this.postsService.create(post)
+    public async create(@Body() createPostInput : CreatePostInput) {
+        return await this.postsService.create(createPostInput)
     }
 
-
+    @Delete(':id')
+    public async remove(@Param('id', ParseIntPipe) id: number) {
+        return await this.postsService.remove(id);
+    }
 }
